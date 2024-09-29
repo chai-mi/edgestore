@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>File Storage</title>
+  <link rel="icon" href="icon.svg" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
+  <script defer src="https://cdn.filesizejs.com/filesize.min.js"></script>
+</head>
+
+<body>
+  <div class="main">
+    <div class="inputObject">
+      <input type="file" id="fileInput" multiple />
+      <label for="fileInput" class="uploadStyle">Select Files ...</label>
+      <button id="uploadButton" class="uploadButton">Upload</button>
+    </div>
+
+    <div class="tableContainer">
+      <table class="fileTable">
+        <thead>
+          <tr>
+            <th scope="col" style="border-top-left-radius: 8px">Name</th>
+            <th scope="col">Size</th>
+            <th scope="col" style="border-top-right-radius: 8px">Status</th>
+          </tr>
+        </thead>
+        <tbody id="fileList">
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tip">
+      <ul>
+        <li>This is a network storage.</li>
+        <li>You can upload any files smaller than 100 MB and download them anywhere.</li>
+        <li>These files will be stored only for one week then expired.</li>
+        <li>Please save the download link after uploaded. It will only appear once.</li>
+      </ul>
+    </div>
+  </div>
+</body>
+
+</html>
