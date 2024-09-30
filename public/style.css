@@ -73,11 +73,6 @@
         background: rgb(224, 224, 224);
     }
 
-    .table-title {
-        background: #333;
-        color: rgb(255, 255, 255);
-    }
-
     .tip {
         background: rgba(230, 224, 224, 0.5);
         border: 1px solid rgb(230, 230, 230);
@@ -140,11 +135,6 @@
 
     .fileTable tr:hover {
         background: rgb(64, 64, 64);
-    }
-
-    .table-title {
-        background: rgb(48, 48, 48);
-        color: rgb(0, 0, 0);
     }
 
     .tip {
@@ -227,14 +217,6 @@ input[type="file"] {
     text-align: left;
     text-align: center;
     word-break: break-all;
-}
-
-.table-title {
-    padding: 10px;
-    text-align: center;
-    font-size: 1.2em;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
 }
 
 .tip {
