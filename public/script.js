@@ -41,6 +41,8 @@ uploadButton.addEventListener('click', () => {
                     linkElement.textContent = "Uploaded"
                     row.cells[2].textContent = ""
                     row.cells[2].appendChild(linkElement)
+                } else {
+                    row.cells[2].textContent = "Upload fail"
                 }
             })
         }
