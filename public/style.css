@@ -10,10 +10,13 @@
 
 @media screen and (max-width: 800px) {
 
-    .tip,
     .inputObject,
     .fileTable {
-        width: 90%;
+        width: 100%;
+    }
+
+    .tip {
+        width: 97%;
     }
 
 }
@@ -167,7 +170,7 @@
     padding: 20px;
     border-radius: 8px;
     height: 70px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .uploadStyle {
@@ -236,7 +239,6 @@ input[type="file"] {
 
 .tip {
     position: fixed;
-    margin: 0 auto;
     bottom: 10px;
     border-radius: 10px;
     backdrop-filter: blur(10px);
@@ -244,7 +246,7 @@ input[type="file"] {
 }
 
 .tip li {
-    margin-bottom: 10px;
+    margin: 3px;
 }
 
 ::-webkit-scrollbar {
