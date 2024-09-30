@@ -198,11 +198,9 @@ input[type="file"] {
 .fileTable {
     border-collapse: collapse;
     table-layout: fixed;
-    margin: 0 auto;
 }
 
 .fileTable th {
-    border-collapse: collapse;
     padding: 10px 15px;
     font-size: 15px;
     font-weight: bold;
@@ -210,11 +208,9 @@ input[type="file"] {
 }
 
 .fileTable td {
-    border-collapse: collapse;
-    padding: 10px 15px;
-    font-size: 14px;
+    padding: 10px 7px;
+    font-size: 15px;
     font-weight: normal;
-    text-align: left;
     text-align: center;
     word-break: break-all;
 }
@@ -228,7 +224,7 @@ input[type="file"] {
 }
 
 .tip li {
-    margin: 3px;
+    margin: 4px;
 }
 
 ::-webkit-scrollbar {
