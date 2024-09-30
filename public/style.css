@@ -20,155 +20,134 @@
 
 @media (prefers-color-scheme: light) {
     body {
-        background-color: #fff;
+        background: rgb(255, 255, 255);
     }
 
-    a:link {
-        color: rgb(0, 0, 0, );
-    }
-
+    a:link,
     a:visited {
-        color: rgb(15, 15, 15);
+        color: rgb(0, 0, 0);
     }
 
     .inputObject {
-        background-color: #f0f0f0;
-        background: rgba(230, 224, 224, 0.5);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border: 1px solid #ccc;
+        background: rgba(220, 220, 220, 0.5);
+        border: 1px solid rgb(230, 230, 230);
     }
 
     .uploadStyle {
         border: 2px solid rgba(0, 0, 0, 0.4);
-        color: rgba(0, 0, 0, 0.3);
+        color: rgba(0, 0, 0, 0.4);
     }
 
     .uploadButton {
-        background-color: #87c3ff;
-        color: rgb(255, 255, 255);
+        background: rgb(135, 195, 255);
     }
 
     .uploadButton:hover {
-        background-color: #64a5ff;
+        background: rgb(100, 165, 255);
     }
 
     .uploadButton:active {
-        background-color: #478dff;
-    }
-
-    .fileTable {
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        background: rgb(71, 141, 255);
     }
 
     .fileTable th {
-        background-color: #c7d1f1;
+        background: rgb(199, 209, 241);
     }
 
     .fileTable td {
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid rgb(208, 208, 208);
     }
 
     .fileTable tr:nth-child(odd) {
-        background-color: #fff;
+        background: rgb(240, 240, 240);
     }
 
     .fileTable tr:nth-child(even) {
-        background-color: #f9f9f9;
+        background: rgb(249, 249, 249);
     }
 
     .fileTable tr:hover {
-        background-color: #e0e0e0;
+        background: rgb(224, 224, 224);
     }
 
     .table-title {
-        background-color: #333;
-        color: white;
+        background: #333;
+        color: rgb(255, 255, 255);
     }
 
     .tip {
-        background-color: #f0f0f0;
         background: rgba(230, 224, 224, 0.5);
-        border: 1px solid rgba(243, 238, 238, 0.3);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgb(230, 230, 230);
     }
 }
 
 @media (prefers-color-scheme: dark) {
     body {
-        background-color: #333;
+        background: rgb(48, 48, 48);
     }
 
-    a:link {
+    a:link,
+    a:visited {
         color: rgb(255, 255, 255);
     }
 
-    a:visited {
-        color: rgb(240, 240, 240);
-    }
-
     .inputObject {
-        background-color: #202020;
-        background: rgba(30, 30, 30, 0.5);
-        border: 1px solid #333;
+        background: rgba(20, 20, 20, 0.5);
+        border: 1px solid rgb(40, 40, 40);
     }
 
     .uploadStyle {
         border: 2px solid rgba(255, 255, 255, 0.4);
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.6);
     }
 
     .uploadButton {
-        background-color: #8ba3bb;
+        background: rgb(77, 146, 214);
         color: rgb(255, 255, 255);
     }
 
     .uploadButton:hover {
-        background-color: #96abc9;
+        background: rgb(107, 174, 241);
     }
 
     .uploadButton:active {
-        background-color: #52698d;
+        background: rgb(82, 105, 141);
     }
 
     .fileTable th {
-        background-color: #505566;
+        background: rgb(80, 85, 102);
     }
 
     .fileTable td {
-        border-bottom: 1px solid #333;
+        border-bottom: 1px solid rgb(48, 48, 48);
     }
 
     .fileTable tr {
-        color: #eee;
+        color: rgb(255, 255, 255);
     }
 
     .fileTable tr:nth-child(odd) {
-        background-color: #292929;
+        background: rgb(41, 41, 41);
 
     }
 
     .fileTable tr:nth-child(even) {
-        background-color: #222;
+        background: rgb(32, 32, 32);
     }
 
     .fileTable tr:hover {
-        background-color: #202020;
+        background: rgb(64, 64, 64);
     }
 
     .table-title {
-        background-color: #333;
-        color: #000;
-    }
-
-    .fileTable {
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        background: rgb(48, 48, 48);
+        color: rgb(0, 0, 0);
     }
 
     .tip {
-        background-color: #101010;
         background: rgba(133, 133, 133, 0.5);
         border: 1px solid rgba(12, 17, 17, 0.3);
-        color: #fff;
+        color: rgb(255, 255, 255);
     }
 }
 
