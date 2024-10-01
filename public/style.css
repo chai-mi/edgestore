@@ -212,6 +212,10 @@
     word-break: break-all;
 }
 
+.tableFoot td{
+    border: none;
+}
+
 .tip {
     position: fixed;
     bottom: 10px;
