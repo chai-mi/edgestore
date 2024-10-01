@@ -73,6 +73,10 @@
         background: rgb(224, 224, 224);
     }
 
+    .tableFoot td {
+        background: rgb(199, 209, 241);
+    }
+
     .tip {
         background: rgba(230, 224, 224, 0.5);
         border: 1px solid rgb(230, 230, 230);
@@ -137,6 +141,10 @@
         background: rgb(64, 64, 64);
     }
 
+    .tableFoot td {
+        background: rgb(80, 85, 102);
+    }
+    
     .tip {
         background: rgba(133, 133, 133, 0.5);
         border: 1px solid rgba(12, 17, 17, 0.3);
