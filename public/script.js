@@ -1,21 +1,32 @@
 const fileInput = document.getElementById('fileInput')
 const uploadButton = document.getElementById('uploadButton')
 const fileList = document.getElementById('fileList')
+const fileTable = document.getElementById('tableContainer')
+const fileCount = document.getElementById('count')
+const fileTotal = document.getElementById('total')
 
 fileInput.addEventListener('change', () => {
     while (fileList.firstChild)
         fileList.removeChild(fileList.firstChild)
 
-    if (fileInput.files)
+    if (fileInput.files && fileInput.files.length > 0) {
+        fileTable.style.setProperty('display', 'flex')
+        let total = 0
         for (const file of fileInput.files) {
             const newRow = fileList.insertRow()
             newRow.insertCell(0).textContent = file.name
             newRow.insertCell(1).textContent = filesize(file.size)
+            total += file.size
             if (file.size > 1e8)
                 newRow.insertCell(2).textContent = 'Too big file'
             else
                 newRow.insertCell(2).textContent = 'Not uploaded'
         }
+        fileCount.textContent = `Count: ${fileInput.files.length}`
+        fileTotal.textContent = `Total Size: ${filesize(total)}`
+    } else {
+        fileTable.style.setProperty('display', 'none')
+    }
 })
 
 uploadButton.addEventListener('click', () => {

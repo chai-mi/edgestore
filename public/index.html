@@ -20,7 +20,7 @@
       <button id="uploadButton" class="uploadButton">Upload</button>
     </div>
 
-    <div class="tableContainer">
+    <div class="tableContainer" id="tableContainer" style="display: none">
       <table class="fileTable">
         <thead>
           <tr>
@@ -33,9 +33,9 @@
         </tbody>
         <tfoot class="tableFoot">
           <tr>
-            <td scope="col" style="border-bottom-left-radius: 8px;"></td>
-            <td scope="col"></td>
-            <td scope="col" style="border-bottom-right-radius: 8px;"></td>
+            <th id="count" style="border-bottom-left-radius: 8px"></th>
+            <th id="total"> </th>
+            <th style="border-bottom-right-radius: 8px"></th>
           </tr>
         </tfoot>
       </table>
