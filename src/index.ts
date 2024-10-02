@@ -1,4 +1,4 @@
-const storecolo = 'sg.jiangzhexin.xyz'
+const storecolo = 'storecolo.edgestore.link'
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
