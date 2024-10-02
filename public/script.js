@@ -77,7 +77,7 @@ const onChink = (index) => {
                     linkElement.textContent = statusMap.uploaded
                     row.cells[2].textContent = ''
                     row.cells[2].appendChild(linkElement)
-                    eow.cells[0].contentEditable = false
+                    row.cells[0].contentEditable = false
                 } else {
                     row.cells[2].textContent = statusMap.uploadFail
                 }
