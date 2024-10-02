@@ -6,11 +6,13 @@ const fileTotal = document.getElementById('total')
 
 const statusMap = {
     tooBig: 'Too big file',
-    notUploaded: 'Not uploaded',
-    pass: 'Pass',
-    uploading: 'Uploading',
-    uploaded: 'uploaded',
-    uploadFail: 'Upload fail'
+    notUploaded: 'Not uploaded -> Uploading',
+    uploading: 'Uploading -> Uploaded',
+    uploadFail: 'Upload fail -> Uploading',
+    uploaded: 'Uploaded -> Deteling',
+    deleting: 'Deteling -> Deteled',
+    deleted: 'Deteled',
+    deleteFail: 'Detele fail -> Deteling'
 }
 
 fileInput.addEventListener('change', () => {
@@ -75,21 +77,35 @@ const onChink = (index) => {
                     const linkElement = document.createElement('a')
                     linkElement.href = decodeURI(data.url)
                     linkElement.download = decodeURIComponent(filename)
-                    linkElement.textContent = statusMap.uploaded
-                    row.cells[2].textContent = ''
-                    row.cells[2].appendChild(linkElement)
+                    linkElement.textContent = row.cells[0].textContent
+                    row.cells[0].textContent = ''
+                    row.cells[0].appendChild(linkElement)
                     row.cells[0].contentEditable = false
+                    row.cells[2].textContent = statusMap.uploaded
                 } else {
                     row.cells[2].textContent = statusMap.uploadFail
                 }
             })
             break
-        case statusMap.tooBig:
-            row.cells[2].textContent = 'Pass'
-            break
-        case statusMap.pass:
-        case statusMap.uploading:
         case statusMap.uploaded:
+        case statusMap.deleteFail:
+            row.cells[2].textContent = statusMap.deleting
+            fetch(`/${row.cells[0].firstChild.textContent}`, {
+                method: 'DELETE'
+            }).then(async (resp) => {
+                if (resp.status === 200) {
+                    row.cells[0].textContent = row.cells[0].firstChild.textContent
+                    row.cells[2].textContent = statusMap.deleted
+                    row.cells[2].classList.remove('status')
+                } else {
+                    row.cells[2].textContent = statusMap.deleteFail
+                }
+            })
+            break
+        case statusMap.tooBig:
+        case statusMap.uploading:
+        case statusMap.deleting:
+        case statusMap.deleted:
             break
         default:
             console.log('other status')
