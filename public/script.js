@@ -6,13 +6,13 @@ const fileTotal = document.getElementById('total')
 
 const statusMap = {
     tooBig: 'Too big file',
-    notUploaded: 'Not uploaded -> Uploading',
+    notUploaded: 'Not uploaded -> Upload',
     uploading: 'Uploading -> Uploaded',
-    uploadFail: 'Upload fail -> Uploading',
-    uploaded: 'Uploaded -> Deteling',
+    uploadFail: 'Upload fail -> Upload',
+    uploaded: 'Uploaded -> Detele',
     deleting: 'Deteling -> Deteled',
     deleted: 'Deteled',
-    deleteFail: 'Detele fail -> Deteling'
+    deleteFail: 'Detele fail -> Detele'
 }
 
 fileInput.addEventListener('change', () => {
