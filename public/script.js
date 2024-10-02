@@ -61,6 +61,7 @@ const onChink = (index) => {
     const row = fileList.rows[index]
     switch (row.cells[2].textContent) {
         case statusMap.notUploaded:
+        case statusMap.uploadFail:
             row.cells[2].textContent = statusMap.uploading
             fetch(`/${row.cells[0].textContent}`, {
                 method: 'PUT',
@@ -85,6 +86,10 @@ const onChink = (index) => {
             break
         case statusMap.tooBig:
             row.cells[2].textContent = 'Pass'
+            break
+        case statusMap.pass:
+        case statusMap.uploading:
+        case statusMap.uploaded:
             break
         default:
             console.log('other status')
