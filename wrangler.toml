@@ -8,10 +8,6 @@ workers_dev = false
 pattern = "edgestore.link/*"
 zone_id = "f0d3d3512bee2ee11268d6be21a4c83a"
 
-[[routes]]
-pattern = "storecolo.edgestore.link/*"
-zone_id = "f0d3d3512bee2ee11268d6be21a4c83a"
-
 [assets]
 directory = "./public/"
 
