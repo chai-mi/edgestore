@@ -15,7 +15,7 @@ const statusMap = {
     deleteFail: 'Delete fail'
 }
 
-const operationMap = {
+const actionMap = {
     upload: 'Upload',
     delete: 'Delete'
 }
@@ -39,8 +39,8 @@ fileInput.addEventListener('change', () => {
                 newRow.cells[0].contentEditable = true
             }
             const buttonElement = document.createElement('div')
-            buttonElement.textContent = operationMap.upload
-            buttonElement.classList.add('operation')
+            buttonElement.textContent = actionMap.upload
+            buttonElement.classList.add('action')
             newRow.insertCell(3).appendChild(buttonElement)
         }
         fileCount.textContent = `Count: ${fileInput.files.length}`
@@ -51,7 +51,7 @@ fileInput.addEventListener('change', () => {
 })
 
 document.getElementById('fileTable').addEventListener('click', (event) => {
-    if (event.target.classList.contains('operation')) {
+    if (event.target.classList.contains('action')) {
         const tr = event.target.parentElement.parentElement
         const rowIndex = Array.from(tr.parentElement.children).indexOf(tr)
         onChink(rowIndex)
@@ -68,7 +68,7 @@ const onChink = (index) => {
     const file = fileInput.files[index]
     const row = fileList.rows[index]
     switch (row.cells[3].firstChild.textContent) {
-        case operationMap.upload:
+        case actionMap.upload:
             row.cells[2].textContent = statusMap.uploading
             fetch(`/${row.cells[0].textContent}`, {
                 method: 'PUT',
@@ -87,13 +87,13 @@ const onChink = (index) => {
                     row.cells[0].appendChild(linkElement)
                     row.cells[0].contentEditable = false
                     row.cells[2].textContent = statusMap.uploaded
-                    row.cells[3].firstChild.textContent = operationMap.delete
+                    row.cells[3].firstChild.textContent = actionMap.delete
                 } else {
                     row.cells[2].textContent = statusMap.uploadFail
                 }
             })
             break
-        case operationMap.delete:
+        case actionMap.delete:
             row.cells[2].textContent = statusMap.deleting
             fetch(`/${row.cells[0].firstChild.textContent}`, {
                 method: 'DELETE'

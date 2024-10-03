@@ -81,15 +81,15 @@
         border: 1px solid rgb(230, 230, 230);
     }
 
-    .operation {
+    .action {
         background: rgb(135, 195, 255);
     }
 
-    .operation:hover {
+    .action:hover {
         background: rgb(100, 165, 255);
     }
 
-    .operation:active {
+    .action:active {
         background: rgb(71, 141, 255);
     }
 }
@@ -159,16 +159,16 @@
         color: rgb(255, 255, 255);
     }
 
-    .operation {
+    .action {
         background: rgb(96, 109, 148);
         color: rgb(255, 255, 255);
     }
 
-    .operation:hover {
+    .action:hover {
         background: rgb(147, 159, 197);
     }
 
-    .operation:active {
+    .action:active {
         background: rgb(82, 105, 141);
     }
 }
@@ -202,7 +202,7 @@
     cursor: pointer;
 }
 
-.operation {
+.action {
     border-radius: 5px;
     padding: 10px;
     cursor: pointer;
