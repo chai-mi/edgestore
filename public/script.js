@@ -6,13 +6,13 @@ const fileTotal = document.getElementById('total')
 
 const statusMap = {
     tooBig: 'Too big file',
-    notUploaded: 'Not uploaded -> upload',
-    uploading: 'Uploading -> uploaded',
-    uploadFail: 'Upload fail -> upload',
-    uploaded: 'Uploaded -> detele',
-    deleting: 'Deteling -> deteled',
+    notUploaded: 'Not uploaded',
+    uploading: 'Uploading',
+    uploadFail: 'Upload fail',
+    uploaded: 'Uploaded',
+    deleting: 'Deteling',
     deleted: 'Deteled',
-    deleteFail: 'Detele fail -> detele'
+    deleteFail: 'Detele fail'
 }
 
 fileInput.addEventListener('change', () => {
@@ -34,6 +34,8 @@ fileInput.addEventListener('change', () => {
                 newRow.cells[0].contentEditable = true
             }
             newRow.cells[2].classList.add('status')
+            newRow.insertCell(3).textContent=''  //测试使用
+            newRow.cells[3].classList.add('operation')
         }
         fileCount.textContent = `Count: ${fileInput.files.length}`
         fileTotal.textContent = `Total: ${filesize(total)}`
