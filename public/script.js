@@ -58,12 +58,6 @@ document.getElementById('fileTable').addEventListener('click', (event) => {
     }
 })
 
-document.getElementById('uploadButton').addEventListener('click', () => {
-    for (let i = 0; i < fileInput.files?.length || 0; i++) {
-        onChink(i)
-    }
-})
-
 const onChink = (index) => {
     const file = fileInput.files[index]
     const row = fileList.rows[index]

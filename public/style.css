@@ -43,18 +43,6 @@
         color: rgba(0, 0, 0, 0.4);
     }
 
-    .uploadButton {
-        background: rgb(135, 195, 255);
-    }
-
-    .uploadButton:hover {
-        background: rgb(100, 165, 255);
-    }
-
-    .uploadButton:active {
-        background: rgb(71, 141, 255);
-    }
-
     .fileTable th,
     .tableFoot td {
         background: rgb(199, 209, 241);
@@ -114,19 +102,6 @@
         color: rgba(255, 255, 255, 0.6);
     }
 
-    .uploadButton {
-        background: rgb(96, 109, 148);
-        color: rgb(255, 255, 255);
-    }
-
-    .uploadButton:hover {
-        background: rgb(147, 159, 197);
-    }
-
-    .uploadButton:active {
-        background: rgb(82, 105, 141);
-    }
-
     .fileTable th,
     .tableFoot td {
         background: rgb(80, 85, 102);
@@ -184,21 +159,18 @@
     align-items: center;
     box-sizing: border-box;
     border-radius: 10px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     padding: 20px;
-    border-radius: 8px;
-    height: 70px;
+    height: 80px;
     margin-bottom: 15px;
 }
 
 .uploadStyle {
-    width: 70%;
+    width: 100%;
+    text-align: center;
     border-radius: 5px;
     display: inline-block;
     vertical-align: middle;
-    padding: 10px 25px;
-    margin-right: 10px;
+    padding: 15px 20px;
     cursor: pointer;
 }
 
@@ -206,18 +178,6 @@
     border-radius: 5px;
     padding: 10px;
     cursor: pointer;
-}
-
-.uploadButton {
-    width: 30%;
-    border-radius: 5px;
-    border: none;
-    text-align: center;
-    padding: 12px;
-    display: inline-block;
-    vertical-align: middle;
-    cursor: pointer;
-    font-size: 1em;
 }
 
 .tableContainer {
