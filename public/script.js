@@ -38,8 +38,10 @@ fileInput.addEventListener('change', () => {
                 newRow.insertCell(2).textContent = statusMap.notUploaded
                 newRow.cells[0].contentEditable = true
             }
-            newRow.insertCell(3).textContent = operationMap.upload
-            newRow.cells[3].classList.add('operation')
+            const buttonElement = document.createElement('div')
+            buttonElement.textContent = operationMap.upload
+            buttonElement.classList.add('operation')
+            newRow.insertCell(3).appendChild(buttonElement)
         }
         fileCount.textContent = `Count: ${fileInput.files.length}`
         fileTotal.textContent = `Total: ${filesize(total)}`
@@ -49,12 +51,10 @@ fileInput.addEventListener('change', () => {
 })
 
 document.getElementById('fileTable').addEventListener('click', (event) => {
-    if (event.target.tagName.toLowerCase() === 'td') {
-        const row = event.target.parentElement
-        const rowIndex = Array.from(row.parentElement.children).indexOf(row)
-        const colIndex = Array.from(row.children).indexOf(event.target)
-        if (colIndex === 3)
-            onChink(rowIndex)
+    if (event.target.classList.contains('operation')) {
+        const tr = event.target.parentElement.parentElement
+        const rowIndex = Array.from(tr.parentElement.children).indexOf(tr)
+        onChink(rowIndex)
     }
 })
 
@@ -67,7 +67,7 @@ document.getElementById('uploadButton').addEventListener('click', () => {
 const onChink = (index) => {
     const file = fileInput.files[index]
     const row = fileList.rows[index]
-    switch (row.cells[3].textContent) {
+    switch (row.cells[3].firstChild.textContent) {
         case operationMap.upload:
             row.cells[2].textContent = statusMap.uploading
             fetch(`/${row.cells[0].textContent}`, {
@@ -87,7 +87,7 @@ const onChink = (index) => {
                     row.cells[0].appendChild(linkElement)
                     row.cells[0].contentEditable = false
                     row.cells[2].textContent = statusMap.uploaded
-                    row.cells[3].textContent = operationMap.delete
+                    row.cells[3].firstChild.textContent = operationMap.delete
                 } else {
                     row.cells[2].textContent = statusMap.uploadFail
                 }
@@ -101,8 +101,7 @@ const onChink = (index) => {
                 if (resp.status === 200) {
                     row.cells[0].textContent = row.cells[0].firstChild.textContent
                     row.cells[2].textContent = statusMap.deleted
-                    row.cells[3].textContent = ''
-                    row.cells[3].classList.remove('operation')
+                    row.cells[3].removeChild(row.cells[3].firstChild)
                 } else {
                     row.cells[2].textContent = statusMap.deleteFail
                 }

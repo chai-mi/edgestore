@@ -81,8 +81,16 @@
         border: 1px solid rgb(230, 230, 230);
     }
 
-    [contenteditable]:focus {
-        border: 1px solid black; /* 设置 2px 黑色实线边框 */
+    .operation {
+        background: rgb(135, 195, 255);
+    }
+
+    .operation:hover {
+        background: rgb(100, 165, 255);
+    }
+
+    .operation:active {
+        background: rgb(71, 141, 255);
     }
 }
 
@@ -151,8 +159,17 @@
         color: rgb(255, 255, 255);
     }
 
-    [contenteditable]:focus {
-        border: 1px solid white; /* 设置 2px 黑色实线边框 */
+    .operation {
+        background: rgb(96, 109, 148);
+        color: rgb(255, 255, 255);
+    }
+
+    .operation:hover {
+        background: rgb(147, 159, 197);
+    }
+
+    .operation:active {
+        background: rgb(82, 105, 141);
     }
 }
 
@@ -186,6 +203,8 @@
 }
 
 .operation {
+    border-radius: 5px;
+    padding: 10px;
     cursor: pointer;
 }
 
