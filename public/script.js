@@ -10,9 +10,14 @@ const statusMap = {
     uploading: 'Uploading',
     uploadFail: 'Upload fail',
     uploaded: 'Uploaded',
-    deleting: 'Deteling',
-    deleted: 'Deteled',
-    deleteFail: 'Detele fail'
+    deleting: 'Deleting',
+    deleted: 'Deleted',
+    deleteFail: 'Delete fail'
+}
+
+const operationMap = {
+    upload: 'Upload',
+    delete: 'Delete'
 }
 
 fileInput.addEventListener('change', () => {
@@ -33,8 +38,7 @@ fileInput.addEventListener('change', () => {
                 newRow.insertCell(2).textContent = statusMap.notUploaded
                 newRow.cells[0].contentEditable = true
             }
-            newRow.cells[2].classList.add('status')
-            newRow.insertCell(3).textContent=''  //测试使用
+            newRow.insertCell(3).textContent = operationMap.upload
             newRow.cells[3].classList.add('operation')
         }
         fileCount.textContent = `Count: ${fileInput.files.length}`
@@ -49,7 +53,7 @@ document.getElementById('fileTable').addEventListener('click', (event) => {
         const row = event.target.parentElement
         const rowIndex = Array.from(row.parentElement.children).indexOf(row)
         const colIndex = Array.from(row.children).indexOf(event.target)
-        if (colIndex === 2)
+        if (colIndex === 3)
             onChink(rowIndex)
     }
 })
@@ -63,9 +67,8 @@ document.getElementById('uploadButton').addEventListener('click', () => {
 const onChink = (index) => {
     const file = fileInput.files[index]
     const row = fileList.rows[index]
-    switch (row.cells[2].textContent) {
-        case statusMap.notUploaded:
-        case statusMap.uploadFail:
+    switch (row.cells[3].textContent) {
+        case operationMap.upload:
             row.cells[2].textContent = statusMap.uploading
             fetch(`/${row.cells[0].textContent}`, {
                 method: 'PUT',
@@ -84,13 +87,13 @@ const onChink = (index) => {
                     row.cells[0].appendChild(linkElement)
                     row.cells[0].contentEditable = false
                     row.cells[2].textContent = statusMap.uploaded
+                    row.cells[3].textContent = operationMap.delete
                 } else {
                     row.cells[2].textContent = statusMap.uploadFail
                 }
             })
             break
-        case statusMap.uploaded:
-        case statusMap.deleteFail:
+        case operationMap.delete:
             row.cells[2].textContent = statusMap.deleting
             fetch(`/${row.cells[0].firstChild.textContent}`, {
                 method: 'DELETE'
@@ -98,16 +101,12 @@ const onChink = (index) => {
                 if (resp.status === 200) {
                     row.cells[0].textContent = row.cells[0].firstChild.textContent
                     row.cells[2].textContent = statusMap.deleted
-                    row.cells[2].classList.remove('status')
+                    row.cells[3].textContent = ''
+                    row.cells[3].classList.remove('operation')
                 } else {
                     row.cells[2].textContent = statusMap.deleteFail
                 }
             })
-            break
-        case statusMap.tooBig:
-        case statusMap.uploading:
-        case statusMap.deleting:
-        case statusMap.deleted:
             break
         default:
             console.log('other status')
