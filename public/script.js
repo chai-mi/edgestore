@@ -51,7 +51,7 @@ fileInput.addEventListener('change', () => {
 })
 
 document.getElementById('fileTable').addEventListener('click', (event) => {
-    if (event.target.classList.contains('action')) {
+    if (event.target.classList.contains('action') && !event.target.classList.contains('waitAction')) {
         const tr = event.target.parentElement.parentElement
         const rowIndex = Array.from(tr.parentElement.children).indexOf(tr)
         onChink(rowIndex)
@@ -59,6 +59,7 @@ document.getElementById('fileTable').addEventListener('click', (event) => {
 })
 
 const onChink = (index) => {
+    row.cells[3].firstChild.classList.add('waitAction')
     const file = fileInput.files[index]
     const row = fileList.rows[index]
     switch (row.cells[3].firstChild.textContent) {
@@ -104,4 +105,5 @@ const onChink = (index) => {
         default:
             console.log('other status')
     }
+    row.cells[3].firstChild.classList.remove('waitAction')
 }
