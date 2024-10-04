@@ -43,8 +43,7 @@
         color: rgba(0, 0, 0, 0.4);
     }
 
-    .fileTable th,
-    .tableFoot td {
+    .fileTable th {
         background: rgb(199, 209, 241);
     }
 
@@ -102,8 +101,7 @@
         color: rgba(255, 255, 255, 0.6);
     }
 
-    .fileTable th,
-    .tableFoot td {
+    .fileTable th {
         background: rgb(80, 85, 102);
     }
 
@@ -203,10 +201,6 @@
     font-weight: normal;
     text-align: center;
     word-break: break-all;
-}
-
-.tableFoot td {
-    border: none;
 }
 
 .tip {
