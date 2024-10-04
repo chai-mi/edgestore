@@ -40,14 +40,14 @@ fileInput.addEventListener('change', () => {
             buttonElement.classList.add('action')
             newRow.insertCell(3).appendChild(buttonElement)
         }
-        document.getElementById('count')?.textContent = `Count: ${fileInput.files.length}`
-        document.getElementById('total')?.textContent = `Total: ${filesize(total)}`
+        document.getElementById('count').textContent = `Count: ${fileInput.files.length}`
+        document.getElementById('total').textContent = `Total: ${filesize(total)}`
     } else {
         document.getElementById('tableContainer')?.style.setProperty('display', 'none')
     }
 })
 
-document.getElementById('fileTable').addEventListener('click', (event) => {
+document.getElementById('fileList').addEventListener('click', (event) => {
     if (event.target.classList.contains('action') && !event.target.classList.contains('waitAction')) {
         const tr = event.target.parentElement.parentElement
         const rowIndex = Array.from(tr.parentElement.children).indexOf(tr)
@@ -56,9 +56,9 @@ document.getElementById('fileTable').addEventListener('click', (event) => {
 })
 
 const onClick = (index) => {
-    row.cells[3].firstChild.classList.add('waitAction')
     const file = fileInput.files[index]
     const row = fileList.rows[index]
+    row.cells[3].firstChild.classList.add('waitAction')
     switch (row.cells[3].firstChild.textContent) {
         case actionMap.upload:
             row.cells[2].textContent = statusMap.uploading
