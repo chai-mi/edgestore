@@ -71,16 +71,12 @@ const toServer = (index) => {
             }).then(async (resp) => {
                 if (resp.status === 200) {
                     const data = await resp.json()
-                    const { pathname } = new URL(data.url)
-                    const filename = pathname.split('/').pop()
-
                     const linkElement = document.createElement('a')
                     linkElement.href = decodeURI(data.url)
-                    linkElement.download = decodeURIComponent(filename)
                     linkElement.textContent = name.textContent
                     linkElement.onclick = (event) => {
                         event.preventDefault()
-                        navigator.clipboard.writeText(decodeURI(data.url))
+                        navigator.clipboard.writeText(data.url)
                     }
                     name.textContent = ''
                     name.appendChild(linkElement)
