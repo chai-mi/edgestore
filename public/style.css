@@ -28,11 +28,6 @@
         background: rgb(255, 255, 255);
     }
 
-    a:link,
-    a:visited {
-        color: rgb(0, 0, 0);
-    }
-
     .inputObject {
         background: rgba(220, 220, 220, 0.5);
         border: 1px solid rgb(230, 230, 230);
@@ -84,11 +79,6 @@
 @media (prefers-color-scheme: dark) {
     body {
         background: rgb(48, 48, 48);
-    }
-
-    a:link,
-    a:visited {
-        color: rgb(255, 255, 255);
     }
 
     .inputObject {
@@ -221,4 +211,8 @@
 
 ::-webkit-scrollbar {
     width: 0px;
+}
+
+u {
+    cursor: pointer;
 }
