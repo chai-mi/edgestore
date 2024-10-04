@@ -76,6 +76,7 @@ const _onClick = (index) => {
                     linkElement.href = decodeURI(data.url)
                     linkElement.download = decodeURIComponent(filename)
                     linkElement.textContent = row.cells[0].textContent
+                    linkElement.setAttribute('onclick', 'copylink(event,this)')
                     row.cells[0].textContent = ''
                     row.cells[0].appendChild(linkElement)
                     row.cells[0].contentEditable = false
@@ -90,7 +91,7 @@ const _onClick = (index) => {
             row.cells[2].textContent = statusMap.deleting
             fetch(`/${row.cells[0].firstChild.textContent}`, {
                 method: 'DELETE'
-            }).then(async (resp) => {
+            }).then((resp) => {
                 if (resp.status === 200) {
                     row.cells[0].textContent = row.cells[0].firstChild.textContent
                     row.cells[2].textContent = statusMap.deleted
@@ -104,4 +105,9 @@ const _onClick = (index) => {
             console.log('other status')
     }
     row.cells[3].firstChild.classList.remove('waitAction')
+}
+
+const copylink = (event, element) => {
+    event.preventDefault()
+    navigator.clipboard.writeText(decodeURI((element.href)))
 }
