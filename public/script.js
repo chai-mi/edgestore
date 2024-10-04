@@ -38,6 +38,7 @@ fileInput.addEventListener('change', () => {
             const buttonElement = document.createElement('div')
             buttonElement.textContent = actionMap.upload
             buttonElement.classList.add('action')
+            buttonElement.setAttribute('onclick', 'onClick(this)')
             newRow.insertCell(3).appendChild(buttonElement)
         }
         document.getElementById('count').textContent = `Count: ${fileInput.files.length}`
@@ -47,15 +48,15 @@ fileInput.addEventListener('change', () => {
     }
 })
 
-document.getElementById('fileList').addEventListener('click', (event) => {
-    if (event.target.classList.contains('action') && !event.target.classList.contains('waitAction')) {
-        const tr = event.target.parentElement.parentElement
+const onClick = (obj) => {
+    if (obj.classList.contains('action') && !obj.classList.contains('waitAction')) {
+        const tr = obj.parentElement.parentElement
         const rowIndex = Array.from(tr.parentElement.children).indexOf(tr)
-        onClick(rowIndex)
+        _onClick(rowIndex)
     }
-})
+}
 
-const onClick = (index) => {
+const _onClick = (index) => {
     const file = fileInput.files[index]
     const row = fileList.rows[index]
     row.cells[3].firstChild.classList.add('waitAction')
