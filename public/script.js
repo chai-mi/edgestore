@@ -26,24 +26,28 @@ fileInput.addEventListener('change', () => {
         let total = 0
         for (const file of fileInput.files) {
             const newRow = fileList.insertRow()
-            newRow.insertCell(0).textContent = file.name
-            newRow.insertCell(1).textContent = filesize(file.size)
+            const name = newRow.insertCell()
+            const size = newRow.insertCell()
+            const status = newRow.insertCell()
+            const action = newRow.insertCell()
+            name.textContent = file.name
+            size.textContent = filesize(file.size)
             total += file.size
             if (file.size > 1e8)
-                newRow.insertCell(2).textContent = statusMap.tooBig
+                status.textContent = statusMap.tooBig
             else {
-                newRow.insertCell(2).textContent = statusMap.notUploaded
-                newRow.cells[0].contentEditable = true
-            }
-            const buttonElement = document.createElement('button')
-            buttonElement.textContent = actionMap.upload
-            buttonElement.classList.add('action')
-            newRow.insertCell(3).appendChild(buttonElement)
-            buttonElement.onclick = () => {
-                if (buttonElement.classList.contains('action')) {
-                    const tr = buttonElement.parentElement.parentElement
-                    const rowIndex = Array.from(tr.parentElement.children).indexOf(tr)
-                    toServer(rowIndex)
+                status.textContent = statusMap.notUploaded
+                name.contentEditable = true
+                const buttonElement = document.createElement('button')
+                buttonElement.textContent = actionMap.upload
+                buttonElement.classList.add('action')
+                action.appendChild(buttonElement)
+                buttonElement.onclick = () => {
+                    if (buttonElement.classList.contains('action')) {
+                        const tr = buttonElement.parentElement.parentElement
+                        const rowIndex = Array.from(tr.parentElement.children).indexOf(tr)
+                        toServer(rowIndex)
+                    }
                 }
             }
         }
@@ -56,12 +60,12 @@ fileInput.addEventListener('change', () => {
 
 const toServer = (index) => {
     const file = fileInput.files[index]
-    const row = fileList.rows[index]
-    switch (row.cells[3].firstChild.textContent) {
+    const [name, size, status, action] = fileList.rows[index].cells
+    switch (action.firstChild.textContent) {
         case actionMap.upload:
-            row.cells[3].firstChild.setAttribute("disabled", true)
-            row.cells[2].textContent = statusMap.uploading
-            fetch(`/${row.cells[0].textContent}`, {
+            action.firstChild.setAttribute("disabled", true)
+            status.textContent = statusMap.uploading
+            fetch(`/${name.textContent}`, {
                 method: 'PUT',
                 body: file
             }).then(async (resp) => {
@@ -73,39 +77,37 @@ const toServer = (index) => {
                     const linkElement = document.createElement('a')
                     linkElement.href = decodeURI(data.url)
                     linkElement.download = decodeURIComponent(filename)
-                    linkElement.textContent = row.cells[0].textContent
+                    linkElement.textContent = name.textContent
                     linkElement.onclick = (event) => {
                         event.preventDefault()
                         navigator.clipboard.writeText(decodeURI(data.url))
                     }
-                    row.cells[0].textContent = ''
-                    row.cells[0].appendChild(linkElement)
-                    row.cells[0].contentEditable = false
-                    row.cells[2].textContent = statusMap.uploaded
-                    row.cells[3].firstChild.textContent = actionMap.delete
+                    name.textContent = ''
+                    name.appendChild(linkElement)
+                    name.contentEditable = false
+                    status.textContent = statusMap.uploaded
+                    action.firstChild.textContent = actionMap.delete
                 } else {
-                    row.cells[2].textContent = statusMap.uploadFail
+                    status.textContent = statusMap.uploadFail
                 }
-                row.cells[3].firstChild.removeAttribute("disabled")
+                action.firstChild.removeAttribute("disabled")
             })
             break
         case actionMap.delete:
-            row.cells[3].firstChild.setAttribute("disabled", true)
-            row.cells[2].textContent = statusMap.deleting
-            fetch(`/${row.cells[0].firstChild.textContent}`, {
+            action.firstChild.setAttribute("disabled", true)
+            status.textContent = statusMap.deleting
+            fetch(`/${name.firstChild.textContent}`, {
                 method: 'DELETE'
             }).then((resp) => {
                 if (resp.status === 200) {
-                    row.cells[0].textContent = row.cells[0].firstChild.textContent
-                    row.cells[2].textContent = statusMap.deleted
-                    row.cells[3].removeChild(row.cells[3].firstChild)
+                    name.textContent = name.firstChild.textContent
+                    status.textContent = statusMap.deleted
+                    action.removeChild(action.firstChild)
                 } else {
-                    row.cells[2].textContent = statusMap.deleteFail
+                    status.textContent = statusMap.deleteFail
+                    action.firstChild.removeAttribute("disabled")
                 }
-                row.cells[3].firstChild.removeAttribute("disabled")
             })
             break
-        default:
-            console.log('other status')
     }
 }
