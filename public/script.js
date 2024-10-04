@@ -38,8 +38,14 @@ fileInput.addEventListener('change', () => {
             const buttonElement = document.createElement('div')
             buttonElement.textContent = actionMap.upload
             buttonElement.classList.add('action')
-            buttonElement.setAttribute('onclick', 'onClick(this)')
             newRow.insertCell(3).appendChild(buttonElement)
+            buttonElement.onclick = () => {
+                if (buttonElement.classList.contains('action') && !buttonElement.classList.contains('waitAction')) {
+                    const tr = buttonElement.parentElement.parentElement
+                    const rowIndex = Array.from(tr.parentElement.children).indexOf(tr)
+                    toServer(rowIndex)
+                }
+            }
         }
         document.getElementById('count').textContent = `Count: ${fileInput.files.length}`
         document.getElementById('total').textContent = `Total: ${filesize(total)}`
@@ -48,20 +54,12 @@ fileInput.addEventListener('change', () => {
     }
 })
 
-const onClick = (obj) => {
-    if (obj.classList.contains('action') && !obj.classList.contains('waitAction')) {
-        const tr = obj.parentElement.parentElement
-        const rowIndex = Array.from(tr.parentElement.children).indexOf(tr)
-        _onClick(rowIndex)
-    }
-}
-
-const _onClick = (index) => {
+const toServer = (index) => {
     const file = fileInput.files[index]
     const row = fileList.rows[index]
-    row.cells[3].firstChild.classList.add('waitAction')
     switch (row.cells[3].firstChild.textContent) {
         case actionMap.upload:
+            row.cells[3].firstChild.classList.add('waitAction')
             row.cells[2].textContent = statusMap.uploading
             fetch(`/${row.cells[0].textContent}`, {
                 method: 'PUT',
@@ -76,7 +74,10 @@ const _onClick = (index) => {
                     linkElement.href = decodeURI(data.url)
                     linkElement.download = decodeURIComponent(filename)
                     linkElement.textContent = row.cells[0].textContent
-                    linkElement.setAttribute('onclick', 'copylink(event,this)')
+                    linkElement.onclick = (event) => {
+                        event.preventDefault()
+                        navigator.clipboard.writeText(decodeURI(data.url))
+                    }
                     row.cells[0].textContent = ''
                     row.cells[0].appendChild(linkElement)
                     row.cells[0].contentEditable = false
@@ -85,9 +86,11 @@ const _onClick = (index) => {
                 } else {
                     row.cells[2].textContent = statusMap.uploadFail
                 }
+                row.cells[3].firstChild.classList.remove('waitAction')
             })
             break
         case actionMap.delete:
+            row.cells[3].firstChild.classList.add('waitAction')
             row.cells[2].textContent = statusMap.deleting
             fetch(`/${row.cells[0].firstChild.textContent}`, {
                 method: 'DELETE'
@@ -99,15 +102,10 @@ const _onClick = (index) => {
                 } else {
                     row.cells[2].textContent = statusMap.deleteFail
                 }
+                row.cells[3].firstChild.classList.remove('waitAction')
             })
             break
         default:
             console.log('other status')
     }
-    row.cells[3].firstChild.classList.remove('waitAction')
-}
-
-const copylink = (event, element) => {
-    event.preventDefault()
-    navigator.clipboard.writeText(decodeURI((element.href)))
 }
