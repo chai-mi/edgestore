@@ -35,12 +35,12 @@ fileInput.addEventListener('change', () => {
                 newRow.insertCell(2).textContent = statusMap.notUploaded
                 newRow.cells[0].contentEditable = true
             }
-            const buttonElement = document.createElement('div')
+            const buttonElement = document.createElement('button')
             buttonElement.textContent = actionMap.upload
             buttonElement.classList.add('action')
             newRow.insertCell(3).appendChild(buttonElement)
             buttonElement.onclick = () => {
-                if (buttonElement.classList.contains('action') && !buttonElement.classList.contains('waitAction')) {
+                if (buttonElement.classList.contains('action')) {
                     const tr = buttonElement.parentElement.parentElement
                     const rowIndex = Array.from(tr.parentElement.children).indexOf(tr)
                     toServer(rowIndex)
@@ -59,7 +59,7 @@ const toServer = (index) => {
     const row = fileList.rows[index]
     switch (row.cells[3].firstChild.textContent) {
         case actionMap.upload:
-            row.cells[3].firstChild.classList.add('waitAction')
+            row.cells[3].firstChild.setAttribute("disabled", true)
             row.cells[2].textContent = statusMap.uploading
             fetch(`/${row.cells[0].textContent}`, {
                 method: 'PUT',
@@ -86,11 +86,11 @@ const toServer = (index) => {
                 } else {
                     row.cells[2].textContent = statusMap.uploadFail
                 }
-                row.cells[3].firstChild.classList.remove('waitAction')
+                row.cells[3].firstChild.removeAttribute("disabled")
             })
             break
         case actionMap.delete:
-            row.cells[3].firstChild.classList.add('waitAction')
+            row.cells[3].firstChild.setAttribute("disabled", true)
             row.cells[2].textContent = statusMap.deleting
             fetch(`/${row.cells[0].firstChild.textContent}`, {
                 method: 'DELETE'
@@ -102,7 +102,7 @@ const toServer = (index) => {
                 } else {
                     row.cells[2].textContent = statusMap.deleteFail
                 }
-                row.cells[3].firstChild.classList.remove('waitAction')
+                row.cells[3].firstChild.removeAttribute("disabled")
             })
             break
         default:
