@@ -1,8 +1,5 @@
 const fileInput = document.getElementById('fileInput')
 const fileList = document.getElementById('fileList')
-const fileTable = document.getElementById('tableContainer')
-const fileCount = document.getElementById('count')
-const fileTotal = document.getElementById('total')
 
 const statusMap = {
     tooBig: 'Too big file',
@@ -25,7 +22,7 @@ fileInput.addEventListener('change', () => {
         fileList.removeChild(fileList.firstChild)
 
     if (fileInput.files && fileInput.files.length > 0) {
-        fileTable.style.setProperty('display', 'flex')
+        document.getElementById('tableContainer')?.style.setProperty('display', 'flex')
         let total = 0
         for (const file of fileInput.files) {
             const newRow = fileList.insertRow()
@@ -43,10 +40,10 @@ fileInput.addEventListener('change', () => {
             buttonElement.classList.add('action')
             newRow.insertCell(3).appendChild(buttonElement)
         }
-        fileCount.textContent = `Count: ${fileInput.files.length}`
-        fileTotal.textContent = `Total: ${filesize(total)}`
+        document.getElementById('count')?.textContent = `Count: ${fileInput.files.length}`
+        document.getElementById('total')?.textContent = `Total: ${filesize(total)}`
     } else {
-        fileTable.style.setProperty('display', 'none')
+        document.getElementById('tableContainer')?.style.setProperty('display', 'none')
     }
 })
 
