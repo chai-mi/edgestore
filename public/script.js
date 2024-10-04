@@ -51,11 +51,11 @@ document.getElementById('fileTable').addEventListener('click', (event) => {
     if (event.target.classList.contains('action') && !event.target.classList.contains('waitAction')) {
         const tr = event.target.parentElement.parentElement
         const rowIndex = Array.from(tr.parentElement.children).indexOf(tr)
-        onChink(rowIndex)
+        onClick(rowIndex)
     }
 })
 
-const onChink = (index) => {
+const onClick = (index) => {
     row.cells[3].firstChild.classList.add('waitAction')
     const file = fileInput.files[index]
     const row = fileList.rows[index]
