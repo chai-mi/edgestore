@@ -45,7 +45,7 @@ async function cachestore(request: Request, ctx: ExecutionContext): Promise<Resp
 			const cacheResponse = new Response(await request.bytes(), {
 				headers: {
 					'Cache-Control': 's-maxage=604800',
-					'Content-Type': request.headers.get('Content-Type') || ''
+					'Content-Type': 'application/octet-stream'
 				}
 			})
 			ctx.waitUntil(caches.default.put(cacheRquest, cacheResponse))
