@@ -1,5 +1,6 @@
 const fileInput = document.getElementById('fileInput')
 const fileList = document.getElementById('fileList')
+const notification = document.getElementById('notification')
 
 const statusMap = {
     tooBig: 'Too big file',
@@ -66,6 +67,14 @@ const insertRow = (file) => {
                     nameLink.textContent = file.name
                     nameLink.onclick = () => {
                         navigator.clipboard.writeText(data.url)
+                        notification.style.visibility = 'visible'
+                        notification.style.opacity = 1
+                        setTimeout(() => {
+                            notification.style.opacity = 0
+                            setTimeout(() => {
+                                notification.style.visibility = 'hidden'
+                            },500)
+                        }, 1000);
                     }
                     name.textContent = ''
                     name.appendChild(nameLink)

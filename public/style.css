@@ -74,6 +74,20 @@
     .action:active {
         background: rgb(71, 141, 255);
     }
+
+    #notification {
+        visibility: visible;
+        position: fixed;
+        bottom: 150px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(203, 200, 200, 0.5);
+        color: rgb(48, 48, 48);
+        padding: 10px;
+        border-radius: 5px;
+        opacity: 0;
+        transition: opacity 0.5s;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -133,6 +147,20 @@
 
     .action:active {
         background: rgb(82, 105, 141);
+    }
+
+    #notification {
+        visibility: hidden;
+        position: fixed;
+        bottom: 150px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(133, 133, 133, 0.5);
+        color: rgb(255, 255, 255);
+        padding: 10px;
+        border-radius: 5px;
+        opacity: 0;
+        transition: opacity 0.5s;
     }
 }
 
