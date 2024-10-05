@@ -42,7 +42,12 @@ async function cachestore(request: Request, ctx: ExecutionContext): Promise<Resp
 	const cacheRquest = new Request(request.url)
 	switch (request.method) {
 		case 'PUT':
-			const cacheResponse = new Response(await request.bytes(), { headers: { 'Cache-Control': 's-maxage=604800' } })
+			const cacheResponse = new Response(await request.bytes(), {
+				headers: {
+					'Cache-Control': 's-maxage=604800',
+					'Content-Type': request.headers.get('Content-Type') || ''
+				}
+			})
 			ctx.waitUntil(caches.default.put(cacheRquest, cacheResponse))
 			return new Response(JSON.stringify({
 				url: request.url,
