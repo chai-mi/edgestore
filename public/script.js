@@ -18,21 +18,22 @@ const actionMap = {
     delete: 'Delete'
 }
 
-fileInput.addEventListener('change', () => {
+fileInput.addEventListener('change', async () => {
     while (fileList.firstChild)
         fileList.removeChild(fileList.firstChild)
 
-    if (fileInput.files && fileInput.files.length > 0) {
-        document.getElementById('tableContainer')?.style.setProperty('display', 'flex')
-        let total = 0
-        for (const file of fileInput.files) {
-            total += file.size
-            insertRow(file)
-        }
-        document.getElementById('count').textContent = `Count: ${fileInput.files.length}`
+    let { count, total } = await tableInit()
+    count += fileInput.files.length
+    for (const file of fileInput.files) {
+        total += file.size
+        insertRow(file)
+    }
+    if (count > 0) {
+        document.getElementById('count').textContent = `Count: ${count}`
         document.getElementById('total').textContent = `Total: ${filesize(total)}`
+        document.getElementById('tableContainer').style.setProperty('display', 'flex')
     } else {
-        document.getElementById('tableContainer')?.style.setProperty('display', 'none')
+        document.getElementById('tableContainer').style.setProperty('display', 'none')
     }
 })
 
@@ -81,6 +82,14 @@ const insertRow = (file) => {
                     name.contentEditable = false
                     status.textContent = statusMap.uploaded
                     actionButton.textContent = actionMap.delete
+                    db.transaction(uploadedFileObjectStore, 'readwrite')
+                        .objectStore(uploadedFileObjectStore)
+                        .put({
+                            url: data.url,
+                            ttl: data.ttl,
+                            name: file.name,
+                            size: file.size,
+                        })
                 } else {
                     status.textContent = statusMap.uploadFail
                 }
@@ -95,6 +104,10 @@ const insertRow = (file) => {
                     name.textContent = file.name
                     status.textContent = statusMap.deleted
                     action.removeChild(actionButton)
+                    const data = await resp.json()
+                    db.transaction(uploadedFileObjectStore, 'readwrite')
+                        .objectStore(uploadedFileObjectStore)
+                        .delete(data.url)
                 } else {
                     status.textContent = statusMap.deleteFail
                     actionButton.removeAttribute('disabled')
@@ -102,4 +115,91 @@ const insertRow = (file) => {
             }
         }
     }
+}
+
+const insertUploadedRow = (result) => {
+    const row = fileList.insertRow()
+    const name = row.insertCell()
+    const size = row.insertCell()
+    const status = row.insertCell()
+    const action = row.insertCell()
+    name.textContent = result.name
+    size.textContent = filesize(result.size)
+    status.textContent = statusMap.uploaded
+    const actionButton = document.createElement('button')
+    actionButton.textContent = actionMap.delete
+    actionButton.classList.add('action')
+    action.appendChild(actionButton)
+    actionButton.onclick = async () => {
+        if (actionButton.textContent === actionMap.delete) {
+            actionButton.setAttribute('disabled', true)
+            status.textContent = statusMap.deleting
+            const resp = await fetch(`/${result.name}`, {
+                method: 'DELETE'
+            })
+            if (resp.status === 200) {
+                name.textContent = result.name
+                status.textContent = statusMap.deleted
+                action.removeChild(actionButton)
+                const data = await resp.json()
+                db.transaction(uploadedFileObjectStore, 'readwrite')
+                    .objectStore(uploadedFileObjectStore)
+                    .delete(data.url)
+            } else {
+                status.textContent = statusMap.deleteFail
+                actionButton.removeAttribute('disabled')
+            }
+        }
+    }
+}
+
+let db
+const uploadedFileObjectStore = 'uploaded'
+const request = indexedDB.open('file', 1)
+
+request.onsuccess = async (event) => {
+    db = event.target.result
+    const { count, total } = await tableInit()
+    if (count > 0) {
+        document.getElementById('count').textContent = `Count: ${count}`
+        document.getElementById('total').textContent = `Total: ${filesize(total)}`
+        document.getElementById('tableContainer').style.setProperty('display', 'flex')
+    }
+}
+
+request.onupgradeneeded = (event) => {
+    db = event.target.result
+    if (!db.objectStoreNames.contains(uploadedFileObjectStore)) {
+        db.createObjectStore(uploadedFileObjectStore, { keyPath: 'url' })
+    }
+}
+
+const tableInit = () => {
+    return new Promise((resolve, reject) => {
+        const uploadedfile = db
+            .transaction(uploadedFileObjectStore, 'readwrite')
+            .objectStore(uploadedFileObjectStore)
+        const cursorRequest = uploadedfile.openCursor()
+        let total = 0
+        let count = 0
+        const now = performance.now()
+        cursorRequest.onsuccess = (event) => {
+            const result = event.target.result
+            if (result) {
+                if (result.value.ttl > now) {
+                    insertUploadedRow(result.value)
+                    count += 1
+                    total += result.value.size
+                } else {
+                    uploadedfile.delete(result.value.url)
+                }
+                result.continue()
+            } else {
+                resolve({ total, count })
+            }
+        }
+        cursorRequest.onerror = (event) => {
+            reject(event.target.error)
+        }
+    })
 }

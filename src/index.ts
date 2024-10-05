@@ -46,13 +46,12 @@ async function cachestore(request: Request, ctx: ExecutionContext): Promise<Resp
 			ctx.waitUntil(caches.default.put(cacheRquest, cacheResponse))
 			return new Response(JSON.stringify({
 				url: request.url,
-				ttl: 604800
+				ttl: performance.now() + 604800 * 1000
 			}))
 		case 'DELETE':
 			const deleted = await caches.default.delete(cacheRquest)
 			return new Response(JSON.stringify({
-				url: request.url,
-				deleteStatus: deleted
+				url: request.url
 			}), { status: deleted ? 200 : 500 })
 		case 'GET':
 			return await caches.default.match(cacheRquest) || new Response('Resource does not exist or has expired', { status: 404 })
