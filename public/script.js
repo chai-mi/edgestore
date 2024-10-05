@@ -9,8 +9,7 @@ const statusMap = {
     uploadFail: 'Upload fail',
     uploaded: 'Uploaded',
     deleting: 'Deleting',
-    deleted: 'Deleted',
-    deleteFail: 'Delete fail'
+    deleted: 'Deleted'
 }
 
 const actionMap = {
@@ -100,18 +99,15 @@ const insertRow = (file) => {
                 const resp = await fetch(`/${file.name}`, {
                     method: 'DELETE'
                 })
-                if (resp.status === 200) {
-                    name.textContent = file.name
-                    status.textContent = statusMap.deleted
-                    action.removeChild(actionButton)
-                    const data = await resp.json()
-                    db.transaction(uploadedFileObjectStore, 'readwrite')
-                        .objectStore(uploadedFileObjectStore)
-                        .delete(data.url)
-                } else {
-                    status.textContent = statusMap.deleteFail
-                    actionButton.removeAttribute('disabled')
-                }
+                name.textContent = file.name
+                status.textContent = statusMap.deleted
+                action.removeChild(actionButton)
+                const data = await resp.json()
+                db.transaction(uploadedFileObjectStore, 'readwrite')
+                    .objectStore(uploadedFileObjectStore)
+                    .delete(data.url)
+                actionButton.removeAttribute('disabled')
+
             }
         }
     }
@@ -123,7 +119,20 @@ const insertUploadedRow = (result) => {
     const size = row.insertCell()
     const status = row.insertCell()
     const action = row.insertCell()
-    name.textContent = result.name
+    const nameLink = document.createElement('u')
+    nameLink.textContent = result.name
+    nameLink.onclick = () => {
+        navigator.clipboard.writeText(result.url)
+        notification.style.visibility = 'visible'
+        notification.style.opacity = 1
+        setTimeout(() => {
+            notification.style.opacity = 0
+            setTimeout(() => {
+                notification.style.visibility = 'hidden'
+            }, 500)
+        }, 1000)
+    }
+    name.appendChild(nameLink)
     size.textContent = filesize(result.size)
     status.textContent = statusMap.uploaded
     const actionButton = document.createElement('button')
@@ -137,18 +146,14 @@ const insertUploadedRow = (result) => {
             const resp = await fetch(`/${result.name}`, {
                 method: 'DELETE'
             })
-            if (resp.status === 200) {
-                name.textContent = result.name
-                status.textContent = statusMap.deleted
-                action.removeChild(actionButton)
-                const data = await resp.json()
-                db.transaction(uploadedFileObjectStore, 'readwrite')
-                    .objectStore(uploadedFileObjectStore)
-                    .delete(data.url)
-            } else {
-                status.textContent = statusMap.deleteFail
-                actionButton.removeAttribute('disabled')
-            }
+            name.textContent = result.name
+            status.textContent = statusMap.deleted
+            action.removeChild(actionButton)
+            const data = await resp.json()
+            db.transaction(uploadedFileObjectStore, 'readwrite')
+                .objectStore(uploadedFileObjectStore)
+                .delete(data.url)
+            actionButton.removeAttribute('disabled')
         }
     }
 }
