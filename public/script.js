@@ -73,8 +73,8 @@ const insertRow = (file) => {
                             notification.style.opacity = 0
                             setTimeout(() => {
                                 notification.style.visibility = 'hidden'
-                            },500)
-                        }, 1000);
+                            }, 500)
+                        }, 1000)
                     }
                     name.textContent = ''
                     name.appendChild(nameLink)
