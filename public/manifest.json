@@ -1,13 +1,13 @@
 {
-    "name": "edgestore",
-    "short_name": "edgestore",
+    "name": "EdgeStore",
+    "short_name": "EdgeStore",
     "start_url": "/",
     "background_color": "#000",
     "display": "standalone",
     "icons": [
         {
             "src": "icon.svg",
-            "sizes": "512x512",
+            "sizes": "800x800",
             "type": "image/svg+xml"
         }
     ]
