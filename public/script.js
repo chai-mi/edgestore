@@ -9,7 +9,8 @@ const statusMap = {
     uploadFail: 'Upload fail',
     uploaded: 'Uploaded',
     deleting: 'Deleting',
-    deleted: 'Deleted'
+    deleted: 'Deleted',
+    expired: 'Expired'
 }
 
 const actionMap = {
@@ -158,6 +159,17 @@ const insertUploadedRow = (result) => {
     }
 }
 
+const insertExpiredRow = (result) => {
+    const row = fileList.insertRow()
+    const name = row.insertCell()
+    const size = row.insertCell()
+    const status = row.insertCell()
+    const action = row.insertCell()
+    name.textContent = result.name
+    size.textContent = filesize(result.size)
+    status.textContent = statusMap.expired
+}
+
 let db
 const uploadedFileObjectStore = 'uploaded'
 const request = indexedDB.open('file', 1)
@@ -191,11 +203,12 @@ const tableInit = () => {
         cursorRequest.onsuccess = (event) => {
             const result = event.target.result
             if (result) {
+                count += 1
+                total += result.value.size
                 if (result.value.ttl > now) {
                     insertUploadedRow(result.value)
-                    count += 1
-                    total += result.value.size
                 } else {
+                    insertExpiredRow(result.value)
                     uploadedfile.delete(result.value.url)
                 }
                 result.continue()
