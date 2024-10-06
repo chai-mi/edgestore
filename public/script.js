@@ -58,14 +58,14 @@ const insertRow = (file) => {
             if (actionButton.textContent === actionMap.upload) {
                 actionButton.setAttribute('disabled', true)
                 status.textContent = statusMap.uploading
-                const resp = await fetch(`/${file.name}`, {
+                const resp = await fetch(`/${name.textContent}`, {
                     method: 'PUT',
                     body: file
                 })
                 if (resp.status === 200) {
                     const data = await resp.json()
                     const nameLink = document.createElement('u')
-                    nameLink.textContent = file.name
+                    nameLink.textContent = name.textContent
                     nameLink.onclick = () => {
                         navigator.clipboard.writeText(data.url)
                         notification.style.visibility = 'visible'
@@ -87,7 +87,7 @@ const insertRow = (file) => {
                         .put({
                             url: data.url,
                             ttl: data.ttl,
-                            name: file.name,
+                            name: name.textContent,
                             size: file.size,
                         })
                 } else {
@@ -97,10 +97,10 @@ const insertRow = (file) => {
             } else if (actionButton.textContent === actionMap.delete) {
                 actionButton.setAttribute('disabled', true)
                 status.textContent = statusMap.deleting
-                const resp = await fetch(`/${file.name}`, {
+                const resp = await fetch(`/${name.textContent}`, {
                     method: 'DELETE'
                 })
-                name.textContent = file.name
+                name.textContent = name.textContent
                 status.textContent = statusMap.deleted
                 action.removeChild(actionButton)
                 const data = await resp.json()
