@@ -55,61 +55,60 @@ const insertRow = (file) => {
         actionButton.classList.add('action')
         action.appendChild(actionButton)
         actionButton.onclick = async () => {
-            if (actionButton.textContent === actionMap.upload) {
-                actionButton.setAttribute('disabled', true)
-                status.textContent = statusMap.uploading
-                const resp = await fetch(`/${name.textContent}`, {
-                    method: 'PUT',
-                    body: file
-                })
-                if (resp.status === 200) {
-                    const data = await resp.json()
-                    const nameLink = document.createElement('u')
-                    nameLink.textContent = name.textContent
-                    nameLink.onclick = () => {
-                        navigator.clipboard.writeText(data.url)
-                        notification.style.visibility = 'visible'
-                        notification.style.opacity = 1
+            actionButton.setAttribute('disabled', true)
+            status.textContent = statusMap.uploading
+            const target = new URL(name.textContent, window.location.href)
+            const resp = await fetch(target, {
+                method: 'PUT',
+                body: file
+            })
+            if (resp.status !== 200) {
+                status.textContent = statusMap.uploadFail
+            } else {
+                const putData = await resp.json()
+                const nameLink = document.createElement('u')
+                nameLink.textContent = name.textContent
+                nameLink.onclick = () => {
+                    navigator.clipboard.writeText(putData.url)
+                    notification.style.visibility = 'visible'
+                    notification.style.opacity = 1
+                    setTimeout(() => {
+                        notification.style.opacity = 0
                         setTimeout(() => {
-                            notification.style.opacity = 0
-                            setTimeout(() => {
-                                notification.style.visibility = 'hidden'
-                            }, 500)
-                        }, 1000)
-                    }
-                    name.textContent = ''
-                    name.appendChild(nameLink)
-                    name.contentEditable = false
-                    status.textContent = statusMap.uploaded
-                    actionButton.textContent = actionMap.delete
+                            notification.style.visibility = 'hidden'
+                        }, 500)
+                    }, 1000)
+                }
+                name.textContent = ''
+                name.appendChild(nameLink)
+                name.contentEditable = false
+                status.textContent = statusMap.uploaded
+                actionButton.textContent = actionMap.delete
+                actionButton.onclick = async () => {
+                    actionButton.setAttribute('disabled', true)
+                    status.textContent = statusMap.deleting
+                    const resp = await fetch(putData.url, {
+                        method: 'DELETE'
+                    })
+                    name.textContent = name.textContent
+                    status.textContent = statusMap.deleted
+                    action.removeChild(actionButton)
+                    const deleteData = await resp.json()
                     db.transaction(uploadedFileObjectStore, 'readwrite')
                         .objectStore(uploadedFileObjectStore)
-                        .put({
-                            url: data.url,
-                            ttl: data.ttl,
-                            name: name.textContent,
-                            size: file.size,
-                        })
-                } else {
-                    status.textContent = statusMap.uploadFail
+                        .delete(deleteData.url)
+                    actionButton.removeAttribute('disabled')
                 }
-                actionButton.removeAttribute('disabled')
-            } else if (actionButton.textContent === actionMap.delete) {
-                actionButton.setAttribute('disabled', true)
-                status.textContent = statusMap.deleting
-                const resp = await fetch(`/${name.textContent}`, {
-                    method: 'DELETE'
-                })
-                name.textContent = name.textContent
-                status.textContent = statusMap.deleted
-                action.removeChild(actionButton)
-                const data = await resp.json()
                 db.transaction(uploadedFileObjectStore, 'readwrite')
                     .objectStore(uploadedFileObjectStore)
-                    .delete(data.url)
-                actionButton.removeAttribute('disabled')
-
+                    .put({
+                        url: putData.url,
+                        ttl: putData.ttl,
+                        name: name.textContent,
+                        size: file.size,
+                    })
             }
+            actionButton.removeAttribute('disabled')
         }
     }
 }
@@ -141,21 +140,19 @@ const insertUploadedRow = (result) => {
     actionButton.classList.add('action')
     action.appendChild(actionButton)
     actionButton.onclick = async () => {
-        if (actionButton.textContent === actionMap.delete) {
-            actionButton.setAttribute('disabled', true)
-            status.textContent = statusMap.deleting
-            const resp = await fetch(`/${result.name}`, {
-                method: 'DELETE'
-            })
-            name.textContent = result.name
-            status.textContent = statusMap.deleted
-            action.removeChild(actionButton)
-            const data = await resp.json()
-            db.transaction(uploadedFileObjectStore, 'readwrite')
-                .objectStore(uploadedFileObjectStore)
-                .delete(data.url)
-            actionButton.removeAttribute('disabled')
-        }
+        actionButton.setAttribute('disabled', true)
+        status.textContent = statusMap.deleting
+        const resp = await fetch(result.url, {
+            method: 'DELETE'
+        })
+        name.textContent = result.name
+        status.textContent = statusMap.deleted
+        action.removeChild(actionButton)
+        const data = await resp.json()
+        db.transaction(uploadedFileObjectStore, 'readwrite')
+            .objectStore(uploadedFileObjectStore)
+            .delete(data.url)
+        actionButton.removeAttribute('disabled')
     }
 }
 
