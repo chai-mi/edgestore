@@ -1,12 +1,13 @@
 compatibility_date = "2024-09-23"
 main = "src/index.ts"
+minify = true
 name = "edgestore"
 upload_source_maps = true
 workers_dev = false
 
 [[routes]]
 pattern = "edgestore.link/*"
-zone_id = "f0d3d3512bee2ee11268d6be21a4c83a"
+zone_name = "edgestore.link"
 
 [assets]
 directory = "./public/"
