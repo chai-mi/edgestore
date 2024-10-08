@@ -6,6 +6,11 @@
         width: 60%;
     }
 
+    .action {
+        width: 80%;
+        padding: 10px;
+    }
+
 }
 
 @media screen and (max-width: 800px) {
@@ -17,6 +22,11 @@
 
     .tip {
         width: 97%;
+    }
+
+    .action {
+        width: 100%;
+        padding: 12px;
     }
 
 }
@@ -172,9 +182,7 @@
 
 .action {
     border-radius: 5px;
-    width: 100%;
     height: 100%;
-    padding: 10px;
     border: none;
     font-size: 1em;
     cursor: pointer;
