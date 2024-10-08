@@ -2,12 +2,6 @@ const storecolo = 'storecolo.edgestore.link'
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		// 判断是否为本地测试环境
-		const { protocol } = new URL(request.url)
-		if (protocol === 'http:') {
-			return cachestore(request, ctx)
-		}
-
 		const TargetColo = request.headers.get('Store-Colo')
 		if (TargetColo) {
 			return cachestore(request, ctx)

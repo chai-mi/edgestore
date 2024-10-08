@@ -13,3 +13,6 @@ directory = "./public/"
 
 [observability]
 enabled = true
+
+[dev]
+host = '127.0.0.1:8787'
