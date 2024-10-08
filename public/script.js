@@ -58,6 +58,7 @@ const insertRow = (file) => {
             actionButton.setAttribute('disabled', true)
             status.textContent = statusMap.uploading
             const target = new URL(name.textContent, window.location.href)
+            target.searchParams.set('sign', crypto.randomUUID())
             const resp = await fetch(target, {
                 method: 'PUT',
                 body: file
