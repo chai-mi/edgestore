@@ -1,4 +1,4 @@
-compatibility_date = "2024-09-23"
+compatibility_date = "2024-10-04"
 main = "src/index.ts"
 minify = true
 name = "edgestore"
@@ -17,3 +17,6 @@ enabled = true
 
 [dev]
 host = '127.0.0.1:8787'
+
+[build]
+command = "tsc -p ./assets/tsconfig.json --outDir ./public"

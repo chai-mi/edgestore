@@ -1,6 +1,8 @@
-const fileInput = document.getElementById('fileInput')
-const fileList = document.getElementById('fileList')
-const notification = document.getElementById('notification')
+declare function filesize(size: number): string
+
+const fileInput = document.getElementById('fileInput') as HTMLInputElement
+const fileList = document.getElementById('fileList') as HTMLTableSectionElement
+const notification = document.getElementById('notification') as HTMLElement
 
 const statusMap = {
     tooBig: 'Too big file',
@@ -23,21 +25,23 @@ fileInput.addEventListener('change', async () => {
         fileList.removeChild(fileList.firstChild)
 
     let { count, total } = await tableInit()
-    count += fileInput.files.length
-    for (const file of fileInput.files) {
+    count += fileInput.files?.length as number
+    const files = fileInput.files as FileList
+    for (let i = 0; i < (fileInput.files?.length || 0); i++) {
+        const file = files.item(i) as File
         total += file.size
         insertRow(file)
     }
     if (count > 0) {
-        document.getElementById('count').textContent = `Count: ${count}`
-        document.getElementById('total').textContent = `Total: ${filesize(total)}`
-        document.getElementById('tableContainer').style.setProperty('display', 'flex')
+        (document.getElementById('count') as HTMLElement).textContent = `Count: ${count}`;
+        (document.getElementById('total') as HTMLElement).textContent = `Total: ${filesize(total)}`;
+        (document.getElementById('tableContainer') as HTMLElement).style.setProperty('display', 'flex')
     } else {
-        document.getElementById('tableContainer').style.setProperty('display', 'none')
+        (document.getElementById('tableContainer') as HTMLElement).style.setProperty('display', 'none')
     }
 })
 
-const insertRow = (file) => {
+const insertRow = (file: File) => {
     const row = fileList.insertRow()
     const name = row.insertCell()
     const size = row.insertCell()
@@ -49,15 +53,15 @@ const insertRow = (file) => {
         status.textContent = statusMap.tooBig
     else {
         status.textContent = statusMap.notUploaded
-        name.contentEditable = true
+        name.contentEditable = 'true'
         const actionButton = document.createElement('button')
         actionButton.textContent = actionMap.upload
         actionButton.classList.add('action')
         action.appendChild(actionButton)
         actionButton.onclick = async () => {
-            actionButton.setAttribute('disabled', true)
+            actionButton.setAttribute('disabled', 'true')
             status.textContent = statusMap.uploading
-            const target = new URL(name.textContent, window.location.href)
+            const target = new URL(name.textContent as string, window.location.href)
             target.searchParams.set('sign', crypto.randomUUID())
             const resp = await fetch(target, {
                 method: 'PUT',
@@ -72,9 +76,9 @@ const insertRow = (file) => {
                 nameLink.onclick = () => {
                     navigator.clipboard.writeText(putData.url)
                     notification.style.visibility = 'visible'
-                    notification.style.opacity = 1
+                    notification.style.opacity = '1'
                     setTimeout(() => {
-                        notification.style.opacity = 0
+                        notification.style.opacity = '0'
                         setTimeout(() => {
                             notification.style.visibility = 'hidden'
                         }, 500)
@@ -82,11 +86,11 @@ const insertRow = (file) => {
                 }
                 name.textContent = ''
                 name.appendChild(nameLink)
-                name.contentEditable = false
+                name.contentEditable = 'false'
                 status.textContent = statusMap.uploaded
                 actionButton.textContent = actionMap.delete
                 actionButton.onclick = async () => {
-                    actionButton.setAttribute('disabled', true)
+                    actionButton.setAttribute('disabled', 'true')
                     status.textContent = statusMap.deleting
                     const resp = await fetch(putData.url, {
                         method: 'DELETE'
@@ -113,8 +117,14 @@ const insertRow = (file) => {
         }
     }
 }
+interface UploadedFile {
+    name: string
+    size: number,
+    url: string,
+    ttl: number
+}
 
-const insertUploadedRow = (result) => {
+const insertUploadedRow = (result: UploadedFile) => {
     const row = fileList.insertRow()
     const name = row.insertCell()
     const size = row.insertCell()
@@ -125,9 +135,9 @@ const insertUploadedRow = (result) => {
     nameLink.onclick = () => {
         navigator.clipboard.writeText(result.url)
         notification.style.visibility = 'visible'
-        notification.style.opacity = 1
+        notification.style.opacity = '1'
         setTimeout(() => {
-            notification.style.opacity = 0
+            notification.style.opacity = '0'
             setTimeout(() => {
                 notification.style.visibility = 'hidden'
             }, 500)
@@ -141,7 +151,7 @@ const insertUploadedRow = (result) => {
     actionButton.classList.add('action')
     action.appendChild(actionButton)
     actionButton.onclick = async () => {
-        actionButton.setAttribute('disabled', true)
+        actionButton.setAttribute('disabled', 'true')
         status.textContent = statusMap.deleting
         const resp = await fetch(result.url, {
             method: 'DELETE'
@@ -157,7 +167,7 @@ const insertUploadedRow = (result) => {
     }
 }
 
-const insertExpiredRow = (result) => {
+const insertExpiredRow = (result: UploadedFile) => {
     const row = fileList.insertRow()
     const name = row.insertCell()
     const size = row.insertCell()
@@ -168,28 +178,30 @@ const insertExpiredRow = (result) => {
     status.textContent = statusMap.expired
 }
 
-let db
+let db: IDBDatabase
 const uploadedFileObjectStore = 'uploaded'
 const request = indexedDB.open('file', 1)
 
 request.onsuccess = async (event) => {
-    db = event.target.result
+    db = request.result
+    // db = event.target?.result
     const { count, total } = await tableInit()
     if (count > 0) {
-        document.getElementById('count').textContent = `Count: ${count}`
-        document.getElementById('total').textContent = `Total: ${filesize(total)}`
-        document.getElementById('tableContainer').style.setProperty('display', 'flex')
+        (document.getElementById('count') as HTMLElement).textContent = `Count: ${count}`;
+        (document.getElementById('total') as HTMLElement).textContent = `Total: ${filesize(total)}`;
+        (document.getElementById('tableContainer') as HTMLElement).style.setProperty('display', 'flex')
     }
 }
 
 request.onupgradeneeded = (event) => {
-    db = event.target.result
+    db = request.result
+    // db = event.target?.result
     if (!db.objectStoreNames.contains(uploadedFileObjectStore)) {
         db.createObjectStore(uploadedFileObjectStore, { keyPath: 'url' })
     }
 }
 
-const tableInit = () => {
+const tableInit = (): Promise<{ total: number, count: number }> => {
     return new Promise((resolve, reject) => {
         const uploadedfile = db
             .transaction(uploadedFileObjectStore, 'readwrite')
@@ -199,7 +211,8 @@ const tableInit = () => {
         let count = 0
         const now = performance.now()
         cursorRequest.onsuccess = (event) => {
-            const result = event.target.result
+            const result = cursorRequest.result
+            // const result = event.target.result
             if (result) {
                 count += 1
                 total += result.value.size
@@ -215,7 +228,8 @@ const tableInit = () => {
             }
         }
         cursorRequest.onerror = (event) => {
-            reject(event.target.error)
+            reject(cursorRequest.error)
+            // reject(event.target.error)
         }
     })
 }
