@@ -3,6 +3,9 @@ declare function filesize(size: number): string
 const fileInput = document.getElementById('fileInput') as HTMLInputElement
 const fileList = document.getElementById('fileList') as HTMLTableSectionElement
 const notification = document.getElementById('notification') as HTMLElement
+const countElement = document.getElementById('count') as HTMLElement
+const totalElement = document.getElementById('total') as HTMLElement
+const tableElement = document.getElementById('tableContainer') as HTMLElement
 
 const statusMap = {
     tooBig: 'Too big file',
@@ -25,19 +28,19 @@ fileInput.addEventListener('change', async () => {
         fileList.removeChild(fileList.firstChild)
 
     let { count, total } = await tableInit()
-    count += fileInput.files?.length as number
-    const files = fileInput.files as FileList
-    for (let i = 0; i < (fileInput.files?.length || 0); i++) {
-        const file = files.item(i) as File
-        total += file.size
-        insertRow(file)
+    if (fileInput.files && fileInput.files.length > 0) {
+        count += fileInput.files.length
+        Array.from(fileInput.files).map(file => {
+            total += file.size
+            insertRow(file)
+        })
     }
     if (count > 0) {
-        (document.getElementById('count') as HTMLElement).textContent = `Count: ${count}`;
-        (document.getElementById('total') as HTMLElement).textContent = `Total: ${filesize(total)}`;
-        (document.getElementById('tableContainer') as HTMLElement).style.setProperty('display', 'flex')
+        countElement.textContent = `Count: ${count}`
+        totalElement.textContent = `Total: ${filesize(total)}`
+        tableElement.style.setProperty('display', 'flex')
     } else {
-        (document.getElementById('tableContainer') as HTMLElement).style.setProperty('display', 'none')
+        tableElement.style.setProperty('display', 'none')
     }
 })
 
@@ -117,10 +120,11 @@ const insertRow = (file: File) => {
         }
     }
 }
+
 interface UploadedFile {
     name: string
-    size: number,
-    url: string,
+    size: number
+    url: string
     ttl: number
 }
 
@@ -182,20 +186,18 @@ let db: IDBDatabase
 const uploadedFileObjectStore = 'uploaded'
 const request = indexedDB.open('file', 1)
 
-request.onsuccess = async (event) => {
+request.onsuccess = async () => {
     db = request.result
-    // db = event.target?.result
     const { count, total } = await tableInit()
     if (count > 0) {
-        (document.getElementById('count') as HTMLElement).textContent = `Count: ${count}`;
-        (document.getElementById('total') as HTMLElement).textContent = `Total: ${filesize(total)}`;
-        (document.getElementById('tableContainer') as HTMLElement).style.setProperty('display', 'flex')
+        countElement.textContent = `Count: ${count}`
+        totalElement.textContent = `Total: ${filesize(total)}`
+        tableElement.style.setProperty('display', 'flex')
     }
 }
 
-request.onupgradeneeded = (event) => {
+request.onupgradeneeded = () => {
     db = request.result
-    // db = event.target?.result
     if (!db.objectStoreNames.contains(uploadedFileObjectStore)) {
         db.createObjectStore(uploadedFileObjectStore, { keyPath: 'url' })
     }
@@ -210,9 +212,8 @@ const tableInit = (): Promise<{ total: number, count: number }> => {
         let total = 0
         let count = 0
         const now = performance.now()
-        cursorRequest.onsuccess = (event) => {
+        cursorRequest.onsuccess = () => {
             const result = cursorRequest.result
-            // const result = event.target.result
             if (result) {
                 count += 1
                 total += result.value.size
@@ -227,9 +228,8 @@ const tableInit = (): Promise<{ total: number, count: number }> => {
                 resolve({ total, count })
             }
         }
-        cursorRequest.onerror = (event) => {
+        cursorRequest.onerror = () => {
             reject(cursorRequest.error)
-            // reject(event.target.error)
         }
     })
 }
