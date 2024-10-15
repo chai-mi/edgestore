@@ -2,7 +2,7 @@
     "name": "EdgeStore",
     "short_name": "EdgeStore",
     "start_url": "/",
-    "background_color": "#000",
+    "background_color": "#303030",
     "display": "standalone",
     "icons": [
         {
