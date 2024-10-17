@@ -6,8 +6,8 @@ upload_source_maps = true
 workers_dev = false
 
 [[routes]]
-pattern = "edgestore.link/*"
-zone_name = "edgestore.link"
+custom_domain = true
+pattern = "edgestore.link"
 
 [assets]
 directory = "./public/"
