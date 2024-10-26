@@ -2,11 +2,11 @@ export default async function cachestore(request: Request, ctx: ExecutionContext
     const cacheRquest = new Request(request.url)
     switch (request.method) {
         case 'PUT':
-            const cacheResponse = new Response(await request.bytes(), { headers: { 'Cache-Control': 's-maxage=604800' } })
+            const cacheResponse = new Response(await request.bytes(), { headers: { 'Cache-Control': 's-maxage=86400' } })
             ctx.waitUntil(caches.default.put(cacheRquest, cacheResponse))
             return new Response(JSON.stringify({
                 url: request.url,
-                ttl: performance.now() + 604800 * 1000
+                ttl: performance.now() + 86400 * 1000
             }))
         case 'DELETE':
             const deleted = await caches.default.delete(cacheRquest)
